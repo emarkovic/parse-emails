@@ -31,6 +31,8 @@ if (process.argv[2]) {
     }
 }
 
+console.log("is windows?", isWindows())
+
 const SLASH = isWindows() ? "\\" : "/";
 
 // argv[0] is node executable path
@@ -69,7 +71,6 @@ function processPath() {
 
 function work() {
     const emlFiles = fs.readdirSync(pathToFolder).filter(file => file.toLowerCase().includes(".eml"));
-    console.log(emlFiles)
 
     const emlPromises = emlFiles.map(file => {
         const fileBuffer = fs.readFileSync(pathToFolder + SLASH + file)
