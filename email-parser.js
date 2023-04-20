@@ -1,8 +1,8 @@
 'use strict';
 
+const os = require('os');
 const fs = require('fs');
 const simpleParser = require('mailparser').simpleParser;
-
 
 // HELP text
 if (process.argv[2]) {
@@ -30,6 +30,8 @@ if (process.argv[2]) {
         process.exit()
     }
 }
+
+const SLASH = isWindows() ? "\\" : "/";
 
 // argv[0] is node executable path
 // argv[1] is path to this file
@@ -61,18 +63,19 @@ function verifyArgs() {
 }
 
 function processPath() {
-    const pathArr = pathToFolder.split("\\");
+    const pathArr = pathToFolder.split(SLASH);
     return pathArr[pathArr.length - 1];
 }
 
 function work() {
-    const emlFiles = fs.readdirSync(pathToFolder).filter(file => file.includes(".eml") || file.includes(".EML");
+    const emlFiles = fs.readdirSync(pathToFolder).filter(file => file.toLowerCase().includes(".eml"));
     console.log(emlFiles)
 
     const emlPromises = emlFiles.map(file => {
-        const fileBuffer = fs.readFileSync(pathToFolder + "\\" + file)
+        const fileBuffer = fs.readFileSync(pathToFolder + SLASH + file)
         return simpleParser(fileBuffer).then(parsed => {
-            return file.replace(".eml", "") + "|" + (parsed.text || "").trim()
+            const fileName = file.replace(".eml", "").replace(".EML", "");
+            return fileName + "|" + (parsed.text || "").trim()
         })
     });
 
@@ -80,4 +83,8 @@ function work() {
         const outputStr = values.join("\n");
         fs.writeFileSync(outputFileName, outputStr)
     })
+}
+
+function isWindows() {
+    return os.platform() === 'win32';
 }
