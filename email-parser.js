@@ -61,7 +61,7 @@ function verifyArgs() {
 }
 
 function processPath() {
-    const pathArr = pathToFolder.split("/");
+    const pathArr = pathToFolder.split("\\");
     return pathArr[pathArr.length - 1];
 }
 
@@ -70,7 +70,7 @@ function work() {
     console.log(emlFiles)
 
     const emlPromises = emlFiles.map(file => {
-        const fileBuffer = fs.readFileSync(pathToFolder + "/" + file)
+        const fileBuffer = fs.readFileSync(pathToFolder + "\\" + file)
         return simpleParser(fileBuffer).then(parsed => {
             return file.replace(".eml", "") + "|" + (parsed.text || "").trim()
         })
