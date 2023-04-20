@@ -66,7 +66,7 @@ function processPath() {
 }
 
 function work() {
-    const emlFiles = fs.readdirSync(pathToFolder).filter(file => file.includes(".eml"));
+    const emlFiles = fs.readdirSync(pathToFolder).filter(file => file.includes(".eml") || file.includes(".EML");
     console.log(emlFiles)
 
     const emlPromises = emlFiles.map(file => {
