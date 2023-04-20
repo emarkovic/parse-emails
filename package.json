@@ -1,0 +1,15 @@
+{
+  "name": "parse-emails",
+  "version": "1.0.0",
+  "main": "email-parser.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "mailparser": "^3.6.4"
+  }
+}
