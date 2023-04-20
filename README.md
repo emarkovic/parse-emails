@@ -1,3 +1,5 @@
+Run all commands in your terminal/powershell
+
 # Install dependencies
 This function uses an external library caled mailparser -> https://github.com/nodemailer/mailparser
 
