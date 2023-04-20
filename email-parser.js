@@ -80,24 +80,4 @@ function work() {
         const outputStr = values.join("\n");
         fs.writeFileSync(outputFileName, outputStr)
     })
-
-    // fs.readdir(pathToFolder, async function (err, files) {
-    //     //handling error
-    //     if (err) {
-    //         return console.error('Error: Unable to scan directory: ' + err);
-    //     } 
-
-    //     const emlFiles = files.filter(file => file.includes(".eml"))
-    //     console.log(emlFiles)
-
-    //     const buffer = Buffer.from("");
-
-    //     emlFiles.forEach(async file => {
-    //         const fileBuffer = fs.readFileSync(pathToFolder + "/" + file)
-    //         const parsedEmail = await simpleParser(fileBuffer);
-    //         buffer.write(`${file}|${parsedEmail}\n`)
-    //     })
-
-    //     console.log(buffer.toString())
-    // });
 }
