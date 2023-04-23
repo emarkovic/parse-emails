@@ -31,8 +31,6 @@ if (process.argv[2]) {
     }
 }
 
-console.log("is windows?", isWindows())
-
 const SLASH = isWindows() ? "\\" : "/";
 
 // argv[0] is node executable path
@@ -70,19 +68,47 @@ function processPath() {
 }
 
 function work() {
-    const emlFiles = fs.readdirSync(pathToFolder).filter(file => file.toLowerCase().includes(".eml"));
+    console.log("......working......");
+    const emlFiles = getFileListFromPath();
 
     const emlPromises = emlFiles.map(file => {
-        const fileBuffer = fs.readFileSync(pathToFolder + SLASH + file)
+        const fileBuffer = fs.readFileSync(file)
         return simpleParser(fileBuffer).then(parsed => {
-            const fileName = file.replace(".eml", "").replace(".EML", "");
-            return fileName + "|" + (parsed.text || "").trim()
+            const lastSlash = file.lastIndexOf(SLASH);
+            const fileName = file.substring(lastSlash + 1).replace(".eml", "").replace(".EML", "");
+            const text = (parsed.text || "").trim().replace("^", "");
+
+            return fileName + "|" + text
         })
     });
 
     Promise.all(emlPromises).then(values => {
         const outputStr = values.join("\n");
-        fs.writeFileSync(outputFileName, outputStr)
+
+        fs.writeFileSync(outputFileName, outputStr) 
+        console.log("Done. Output file: " + outputFileName);
+    })
+}
+
+function getFileListFromPath() {
+    const emlFiles = [];
+
+    readPath(emlFiles, pathToFolder)
+
+    return emlFiles;
+}
+
+function readPath(emlFiles, path) {
+    fs.readdirSync(path).forEach(fileOrDir => {
+        const fullPath = path + SLASH + fileOrDir;
+        if (fileOrDir.includes(".")) {
+            if (fileOrDir.includes(".eml")) {
+                emlFiles.push(fullPath)
+            }
+        } else {
+            // its another directory
+            readPath(emlFiles, fullPath)
+        }
     })
 }
 
