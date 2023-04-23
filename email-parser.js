@@ -102,7 +102,7 @@ function readPath(emlFiles, path) {
     fs.readdirSync(path).forEach(fileOrDir => {
         const fullPath = path + SLASH + fileOrDir;
         if (fileOrDir.includes(".")) {
-            if (fileOrDir.includes(".eml")) {
+            if (fileOrDir.toLocaleLowerCase().includes(".eml")) {
                 emlFiles.push(fullPath)
             }
         } else {
