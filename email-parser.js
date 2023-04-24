@@ -76,9 +76,9 @@ function work() {
         return simpleParser(fileBuffer).then(parsed => {
             const lastSlash = file.lastIndexOf(SLASH);
             const fileName = file.substring(lastSlash + 1).replace(".eml", "").replace(".EML", "");
-            const text = (parsed.text || "").trim().replace("^", "");
+            const text = (parsed.text || "").trim().replaceAll("^", "");
 
-            return fileName + "|" + text
+            return "^" + fileName + "|" + text + "^";
         })
     });
 
