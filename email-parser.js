@@ -70,15 +70,34 @@ function processPath() {
 function work() {
     console.log("......working......");
     const emlFiles = getFileListFromPath();
+    const htmlRegex = /<[^>]+>/g;
 
     const emlPromises = emlFiles.map(file => {
         const fileBuffer = fs.readFileSync(file)
         return simpleParser(fileBuffer).then(parsed => {
             const lastSlash = file.lastIndexOf(SLASH);
             const fileName = file.substring(lastSlash + 1).replace(".eml", "").replace(".EML", "");
-            const text = (parsed.text || "").trim().replaceAll("^", "");
 
-            return "^" + fileName + "|" + text + "^";
+            let text = parsed.text;
+            if (parsed.attachments.length > 0) {
+                // replacing each attachment text with ""
+                text = parsed.html;
+                parsed.attachments.forEach(attachment => {
+                    const attachmentText = attachment.content.toString("base64")
+                    text = text.replace(attachmentText, "")
+                })
+
+                // Looking for center elements:
+                // const indexOfCenter = parsed.html.indexOf("<center>")
+                // text = parsed.html.substring(0, indexOfCenter);
+            } 
+            text = (text || "")
+                .trim()
+                .replaceAll("^", "")
+                .replace(htmlRegex, "")
+                .replace(/(\r\n|\n|\r)/gm, "®️");
+            
+            return "^" + fileName + "^|^" + text + "^";
         })
     });
 
