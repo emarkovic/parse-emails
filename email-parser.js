@@ -91,11 +91,14 @@ function work() {
                 // const indexOfCenter = parsed.html.indexOf("<center>")
                 // text = parsed.html.substring(0, indexOfCenter);
             } 
+            console.log(text)
             text = (text || "")
                 .trim()
                 .replaceAll("^", "")
                 .replace(htmlRegex, "")
-                .replace(/(\r\n|\n|\r)/gm, "®️");
+                .trim()
+                .replace(/(\r\n|\n|\r)/gm, "®️")
+
             
             return "^" + fileName + "^|^" + text + "^";
         })
